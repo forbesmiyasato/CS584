@@ -57,15 +57,15 @@ int MT::highwayStops (std::vector<int> distance, std::vector<int> cost, int tota
   return minCostSet;
 }
 
-Maxes MT::DAC (std::vector<int> temperatures, int l, int r, Maxes maxes) {
+Maxes MT::DAC (std::vector<int> temperatures, int l, int r) {
   if (l < r) {
     if (l == r - 1) {
       return Maxes (temperatures[r] - temperatures[l], temperatures[l] - temperatures[r]);
     }
 
     int mid = mid = static_cast <int> (floor ((l + r) / 2));
-    Maxes maxesLeft = DAC (temperatures, l, mid, maxes);
-    Maxes maxesRight = DAC (temperatures, mid + 1, r, maxes);
+    Maxes maxesLeft = DAC (temperatures, l, mid);
+    Maxes maxesRight = DAC (temperatures, mid + 1, r);
 
     //Find min and max in the left hand side
     int leftMaxNum = INT_MIN;
@@ -118,8 +118,7 @@ Maxes MT::DACON (std::vector<int> temperatures, int l, int r) {
 Maxes MT::temperatures (std::vector<int> temperatures)
 {
   int high = temperatures.size ();
-  Maxes maxes;
-  return DAC (temperatures, 0, high - 1, maxes);
+  return DAC (temperatures, 0, high - 1);
 }
 
 Maxes MT::temperaturesON (std::vector<int> temperatures)
@@ -134,9 +133,9 @@ void MT::test () {
 
   std::cout << highwayStops (distance, cost, 100) << std::endl;
 
-  Maxes maxes = temperatures ({ 10, 1, 1, 2, 3, 4, -1 });
+  Maxes maxes = temperatures ({ 10, 0, 1, 2, 3, 4, -1 });
   std::cout << maxes.up << " " << maxes.down << std::endl;
 
-  Maxes maxesON = temperaturesON ({ 10, 1, 1, 2, 3, 4, -1 });
+  Maxes maxesON = temperaturesON ({ 10, 0, 1, 2, 3, 4, -1 });
   std::cout << maxesON.up << " " << maxesON.down << std::endl;
 }

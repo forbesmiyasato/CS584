@@ -32,7 +32,7 @@ class MT {
 public:
   int highwayStops (std::vector<int> distance, std::vector<int> cost, int totalDistance);
   Maxes temperatures (std::vector<int> temperatures);
-  Maxes DAC (std::vector<int> temperatrues, int l, int r, Maxes maxes);
+  Maxes DAC (std::vector<int> temperatrues, int l, int r);
   Maxes DACON (std::vector<int> temperatrues, int l, int r);
   Maxes temperaturesON (std::vector<int> temperatures);
   void test ();
