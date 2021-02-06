@@ -6,7 +6,7 @@
 int MT::highwayStops (std::vector<int> distance, std::vector<int> cost, int totalDistance)
 {
   int size = distance.size ();
-  std::vector<std::pair<int, int>> dp (size, std::make_pair(INT_MAX, -1)); //pair - cost up to this stop and previous stop
+  std::vector<std::pair<int, int>> dp (size, std::make_pair (INT_MAX, -1)); //pair - cost up to this stop and previous stop
 
   for (int i = 0; i < size; i++) {
     int curDistance = distance[i];
@@ -74,7 +74,7 @@ Maxes MT::DAC (std::vector<int> temperatures, int l, int r, Maxes maxes) {
       leftMaxNum = std::max (leftMaxNum, temperatures[i]);
       leftMinNum = std::min (leftMinNum, temperatures[i]);
     }
-    
+
     //Find min and max in the right hand side
     int rightMaxNum = INT_MIN;
     int rightMinNum = INT_MAX;
@@ -91,11 +91,41 @@ Maxes MT::DAC (std::vector<int> temperatures, int l, int r, Maxes maxes) {
   }
 }
 
+Maxes MT::DACON (std::vector<int> temperatures, int l, int r) {
+  if (l == r) {
+    return Maxes (0, 0, temperatures[l], temperatures[r]);
+  }
+  if (l < r) {
+    if (l == r - 1) {
+      int right = temperatures[r];
+      int left = temperatures[l];
+      return Maxes (right - left, left - right, std::max(left, right), std::min(left, right));
+    }
+
+    int mid = mid = static_cast <int> (floor ((l + r) / 2));
+    Maxes maxesLeft = DACON (temperatures, l, mid);
+    Maxes maxesRight = DACON (temperatures, mid + 1, r);
+
+    Maxes maxes;
+    maxes.up = std::max (std::max (maxesLeft.up, maxesRight.up), maxesRight.max - maxesLeft.min);
+    maxes.down = std::max (std::max (maxesLeft.down, maxesRight.down), maxesLeft.max - maxesRight.min);
+    maxes.max = std::max (maxesLeft.max, maxesRight.max);
+    maxes.min = std::min (maxesLeft.min, maxesRight.min);
+    return maxes;
+  }
+}
+
 Maxes MT::temperatures (std::vector<int> temperatures)
 {
   int high = temperatures.size ();
   Maxes maxes;
-  return DAC(temperatures, 0, high - 1, maxes);
+  return DAC (temperatures, 0, high - 1, maxes);
+}
+
+Maxes MT::temperaturesON (std::vector<int> temperatures)
+{
+  int high = temperatures.size ();
+  return DACON (temperatures, 0, high - 1);
 }
 
 void MT::test () {
@@ -104,6 +134,9 @@ void MT::test () {
 
   std::cout << highwayStops (distance, cost, 100) << std::endl;
 
-  Maxes maxes = temperatures ({ 10, 0, 1, 2, 3, 4, -1 });
+  Maxes maxes = temperatures ({ 10, 1, 1, 2, 3, 4, -1 });
   std::cout << maxes.up << " " << maxes.down << std::endl;
+
+  Maxes maxesON = temperaturesON ({ 10, 1, 1, 2, 3, 4, -1 });
+  std::cout << maxesON.up << " " << maxesON.down << std::endl;
 }
