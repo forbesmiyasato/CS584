@@ -48,13 +48,8 @@ int MT::highwayStops (std::vector<int> distance, std::vector<int> cost, int tota
     return -1; //no rest stop within 30 miles of end
   }
 
-  int minCostSet = 0;
-  while (index != -1) {
-    minCostSet += cost[index];
-    index = dp[index].second;
-  }
 
-  return minCostSet;
+  return endStopMinCost;
 }
 
 Maxes MT::DAC (std::vector<int> temperatures, int l, int r) {
