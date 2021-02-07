@@ -122,6 +122,24 @@ Maxes MT::temperaturesON (std::vector<int> temperatures)
   return DACON (temperatures, 0, high - 1);
 }
 
+void MT::singlePass (std::vector<int> temperatures)
+{
+  int maxDown = 0;
+  int maxUp = 0;
+  int size = temperatures.size ();
+  int leftMin = INT_MAX;
+  int rightMin = INT_MAX;
+
+  for (int i = 0; i < size; i++) {
+    maxUp = std::max (maxUp, temperatures[i] - leftMin);
+    maxDown = std::max (maxDown, temperatures[size - i - 1] - rightMin);
+    leftMin = std::min (temperatures[i], leftMin);
+    rightMin = std::min (temperatures[size - i - 1], rightMin);
+  }
+
+  std::cout << maxUp << " " << maxDown << std::endl;
+}
+
 void MT::test () {
   std::vector<int> distance ({ 15, 20, 25, 45, 50, 70, 80 });
   std::vector<int> cost ({ 2, 2, 1, 21, 4, 7, 3 });
@@ -133,4 +151,6 @@ void MT::test () {
 
   Maxes maxesON = temperaturesON ({ 10, 0, 1, 2, 3, 4, -1 });
   std::cout << maxesON.up << " " << maxesON.down << std::endl;
+
+  singlePass ({ 10, 0, 1, 2, 3, 4, -1 });
 }

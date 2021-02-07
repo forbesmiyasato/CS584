@@ -35,5 +35,6 @@ public:
   Maxes DAC (std::vector<int> temperatrues, int l, int r);
   Maxes DACON (std::vector<int> temperatrues, int l, int r);
   Maxes temperaturesON (std::vector<int> temperatures);
+  void singlePass (std::vector<int> temperatures);
   void test ();
 };
